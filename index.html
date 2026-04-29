@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Kubb">
-    <title>Kubb</title>
+    <title>International Virtual Kubb</title>
     <style>
         :root {
             --grass: #2d5a27;
@@ -20,408 +20,75 @@
             --king-gold: #c8960a;
             --king-light: #f0c030;
         }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-select: none; user-select: auto; }
+        html, body { margin: 0; padding: 0; background: var(--grass-dark); font-family: -apple-system, 'SF Pro Rounded', system-ui, sans-serif; overscroll-behavior: none; }
+        body { padding: max(env(safe-area-inset-top), 10px) 10px max(env(safe-area-inset-bottom), 16px) 10px; }
+        .board { max-width: 420px; margin: 0 auto; background: var(--grass); border-radius: 20px; overflow: hidden; box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: auto;
-        }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            background: var(--grass-dark);
-            font-family: -apple-system, 'SF Pro Rounded', system-ui, sans-serif;
-            overscroll-behavior: none;
-        }
-
-        body {
-            padding: max(env(safe-area-inset-top), 10px) 10px max(env(safe-area-inset-bottom), 16px) 10px;
-        }
-
-        .board {
-            max-width: 420px;
-            margin: 0 auto;
-            background: var(--grass);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 12px 48px rgba(0,0,0,0.5);
-        }
-
-        /* ── Header ── */
-        .header {
-            background: var(--grass-dark);
-            padding: 14px 16px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .kubb-icon {
-            width: 34px;
-            height: 34px;
-            flex-shrink: 0;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--sand-light);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .player-wrap {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
+        /* Header */
+        .header { background: var(--grass-dark); padding: 12px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .kubb-icon { width: 34px; height: 34px; flex-shrink: 0; }
+        h1 { margin: 0; font-size: 24px; font-weight: 800; color: var(--sand-light); letter-spacing: 4px; text-transform: uppercase; }
+        .tagline { font-size: 8px; font-weight: 700; color: rgba(240,192,48,0.65); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; }
+        .player-wrap { display: flex; align-items: center; gap: 6px; }
         .crown { color: var(--king-light); font-size: 15px; }
+        .player-wrap input { font-size: 14px; font-family: inherit; font-weight: 700; padding: 6px 12px; text-align: center; border-radius: 30px; border: 1.5px solid rgba(200,150,50,0.5); background: rgba(255,255,255,0.07); color: var(--sand-light); width: 110px; outline: none; -webkit-user-select: auto; user-select: auto; }
+        .player-wrap input:focus { border-color: var(--king-light); background: rgba(255,255,255,0.12); }
 
-        .player-wrap input {
-            font-size: 14px;
-            font-family: inherit;
-            font-weight: 700;
-            padding: 6px 12px;
-            text-align: center;
-            border-radius: 30px;
-            border: 1.5px solid rgba(200,150,50,0.5);
-            background: rgba(255,255,255,0.07);
-            color: var(--sand-light);
-            width: 110px;
-            outline: none;
-        }
+        /* Language bar */
+        .lang-bar { background: var(--grass-dark); padding: 7px 12px 9px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
+        .lang-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 20px; color: rgba(255,255,255,0.5); font-size: 10px; font-family: inherit; font-weight: 700; padding: 4px 9px; cursor: pointer; transition: background 0.1s, color 0.1s; letter-spacing: 0.5px; }
+        .lang-btn.active { background: var(--king-gold); border-color: var(--king-light); color: #1a1008; }
+        .lang-btn:active { transform: scale(0.92); }
 
-        .player-wrap input:focus {
-            border-color: var(--king-light);
-            background: rgba(255,255,255,0.12);
-        }
-
-        /* ── Rounds ── */
-        .rounds {
-            padding: 12px 12px 4px;
-        }
-
-        .round-row {
-            display: grid;
-            grid-template-columns: 52px 1fr 68px;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .dist {
-            background: var(--wood-dark);
-            border: 1.5px solid var(--wood-light);
-            border-radius: 10px;
-            padding: 7px 0;
-            color: var(--sand-light);
-            font-weight: 800;
-            font-size: 13px;
-            text-align: center;
-            letter-spacing: 0.5px;
-            -webkit-user-select: none;
-        }
-
-        .dist.is-king {
-            background: var(--king-gold);
-            border-color: var(--king-light);
-            color: #fff8e0;
-        }
-
-        .hits {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.25);
-            border-radius: 30px;
-            padding: 4px 5px;
-        }
-
-        .hits button {
-            background: var(--wood);
-            border: 1px solid rgba(255,255,255,0.15);
-            font-size: 22px;
-            font-weight: 700;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            color: var(--sand-light);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            line-height: 1;
-            flex-shrink: 0;
-            transition: transform 0.08s, background 0.08s;
-        }
-
+        /* Rounds */
+        .rounds { padding: 12px 12px 4px; }
+        .round-row { display: grid; grid-template-columns: 52px 1fr 68px; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .dist { background: var(--wood-dark); border: 1.5px solid var(--wood-light); border-radius: 10px; padding: 7px 0; color: var(--sand-light); font-weight: 800; font-size: 13px; text-align: center; letter-spacing: 0.5px; }
+        .dist.is-king { background: var(--king-gold); border-color: var(--king-light); color: #fff8e0; }
+        .hits { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.25); border-radius: 30px; padding: 4px 5px; }
+        .hits button { background: var(--wood); border: 1px solid rgba(255,255,255,0.15); font-size: 22px; font-weight: 700; width: 40px; height: 40px; border-radius: 50%; color: var(--sand-light); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; flex-shrink: 0; transition: transform 0.08s, background 0.08s; }
         .hits button:active { transform: scale(0.88); background: var(--wood-dark); }
-
-        .kubb-pips {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            flex: 1;
-            padding: 0 2px;
-        }
-
-        .pip {
-            width: 13px;
-            height: 20px;
-            border-radius: 3px;
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: background 0.12s, border-color 0.12s;
-        }
-
-        .pip.active {
-            background: var(--wood-pale);
-            border-color: var(--wood-light);
-        }
-
-        .pip.active.king-pip {
-            background: var(--king-light);
-            border-color: var(--king-gold);
-        }
-
-        .points {
-            background: rgba(0,0,0,0.28);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px;
-            padding: 7px 0;
-            color: var(--sand-light);
-            font-weight: 700;
-            font-size: 12px;
-            text-align: center;
-        }
-
-        .points.king-pts {
-            background: rgba(200,150,10,0.25);
-            border-color: var(--king-gold);
-            color: var(--king-light);
-        }
-
-        .king-strip {
-            grid-column: 1 / -1;
-            background: rgba(200,150,10,0.18);
-            border: 1px solid var(--king-gold);
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--king-light);
-            text-align: center;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-top: -4px;
-            margin-bottom: 4px;
-            display: none;
-        }
-
+        .kubb-pips { display: flex; align-items: center; justify-content: center; gap: 3px; flex: 1; padding: 0 2px; }
+        .pip { width: 13px; height: 20px; border-radius: 3px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.08); transition: background 0.12s, border-color 0.12s; }
+        .pip.active { background: var(--wood-pale); border-color: var(--wood-light); }
+        .pip.active.king-pip { background: var(--king-light); border-color: var(--king-gold); }
+        .points { background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 7px 0; color: var(--sand-light); font-weight: 700; font-size: 12px; text-align: center; }
+        .points.king-pts { background: rgba(200,150,10,0.25); border-color: var(--king-gold); color: var(--king-light); }
+        .king-strip { grid-column: 1 / -1; background: rgba(200,150,10,0.18); border: 1px solid var(--king-gold); border-radius: 8px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: var(--king-light); text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-top: -4px; margin-bottom: 4px; display: none; }
         .king-strip.show { display: block; }
 
-        /* ── Divider ── */
-        .divider {
-            height: 1px;
-            background: rgba(255,255,255,0.08);
-            margin: 4px 12px 10px;
-        }
+        .divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 12px 10px; }
 
-        /* ── Summary ── */
-        .summary {
-            margin: 0 12px 8px;
-            background: rgba(0,0,0,0.28);
-            border-radius: 12px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid rgba(255,255,255,0.07);
-        }
+        /* Summary */
+        .summary { margin: 0 12px 8px; background: rgba(0,0,0,0.28); border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.07); }
+        .summary-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 1.5px; }
+        .summary-val { font-size: 19px; font-weight: 800; color: var(--sand-light); }
 
-        .summary-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: rgba(255,255,255,0.38);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .summary-val {
-            font-size: 19px;
-            font-weight: 800;
-            color: var(--sand-light);
-        }
-
-        /* ── Bonus ── */
-        .bonus {
-            margin: 0 12px 8px;
-            background: rgba(200,150,10,0.1);
-            border: 1.5px solid var(--king-gold);
-            border-radius: 14px;
-            padding: 12px 14px;
-        }
-
-        .bonus-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--king-light);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .bonus-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .bonus-row button.step {
-            background: var(--wood-dark);
-            border: 1px solid var(--wood-light);
-            font-size: 22px;
-            font-weight: 700;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            color: var(--sand-light);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            transition: transform 0.08s;
-        }
-
+        /* Bonus */
+        .bonus { margin: 0 12px 8px; background: rgba(200,150,10,0.1); border: 1.5px solid var(--king-gold); border-radius: 14px; padding: 12px 14px; }
+        .bonus-title { font-size: 11px; font-weight: 700; color: var(--king-light); text-transform: uppercase; letter-spacing: 1.5px; text-align: center; margin-bottom: 10px; }
+        .bonus-row { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .bonus-row button.step { background: var(--wood-dark); border: 1px solid var(--wood-light); font-size: 22px; font-weight: 700; width: 40px; height: 40px; border-radius: 50%; color: var(--sand-light); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: transform 0.08s; }
         .bonus-row button.step:active { transform: scale(0.88); }
-
-        .bonus-count {
-            font-size: 21px;
-            font-weight: 800;
-            color: var(--king-light);
-            background: rgba(0,0,0,0.28);
-            padding: 4px 12px;
-            border-radius: 10px;
-            min-width: 44px;
-            text-align: center;
-        }
-
-        .bonus-eq {
-            font-size: 13px;
-            font-weight: 700;
-            color: rgba(255,255,255,0.45);
-        }
-
+        .bonus-count { font-size: 21px; font-weight: 800; color: var(--king-light); background: rgba(0,0,0,0.28); padding: 4px 12px; border-radius: 10px; min-width: 44px; text-align: center; }
+        .bonus-eq { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.45); }
         .bonus-eq strong { color: var(--king-light); }
-
-        #applyBonusBtn {
-            background: var(--king-gold);
-            border: none;
-            border-radius: 20px;
-            padding: 8px 14px;
-            font-size: 12px;
-            font-family: inherit;
-            font-weight: 700;
-            color: #1a1008;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: background 0.1s, transform 0.08s;
-        }
-
+        #applyBonusBtn { background: var(--king-gold); border: none; border-radius: 20px; padding: 8px 14px; font-size: 12px; font-family: inherit; font-weight: 700; color: #1a1008; cursor: pointer; letter-spacing: 0.5px; transition: background 0.1s, transform 0.08s; }
         #applyBonusBtn:active { transform: scale(0.92); }
+        #applyBonusBtn.applied { background: var(--grass-light); color: white; }
 
-        #applyBonusBtn.applied {
-            background: var(--grass-light);
-            color: white;
-        }
+        /* Final */
+        .final { margin: 0 12px 10px; background: var(--wood-dark); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border: 1.5px solid var(--wood-light); }
+        .final-label { font-size: 11px; font-weight: 700; color: rgba(255,220,140,0.55); text-transform: uppercase; letter-spacing: 2px; }
+        .final-right { display: flex; align-items: baseline; gap: 5px; }
+        .final-val { font-size: 30px; font-weight: 800; color: var(--sand-light); }
+        .final-unit { font-size: 13px; font-weight: 700; color: rgba(255,220,140,0.45); }
 
-        /* ── Final ── */
-        .final {
-            margin: 0 12px 10px;
-            background: var(--wood-dark);
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1.5px solid var(--wood-light);
-        }
-
-        .final-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: rgba(255,220,140,0.55);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .final-right {
-            display: flex;
-            align-items: baseline;
-            gap: 5px;
-        }
-
-        .final-val {
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--sand-light);
-        }
-
-        .final-unit {
-            font-size: 13px;
-            font-weight: 700;
-            color: rgba(255,220,140,0.45);
-        }
-
-        /* ── Reset ── */
-        .reset {
-            display: block;
-            margin: 0 12px 14px;
-            width: calc(100% - 24px);
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: rgba(255,255,255,0.5);
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-family: inherit;
-            font-weight: 700;
-            cursor: pointer;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: background 0.1s, color 0.1s;
-        }
-
-        .reset:active {
-            background: rgba(255,255,255,0.12);
-            color: rgba(255,255,255,0.85);
-        }
-
-        footer {
-            text-align: center;
-            font-size: 11px;
-            padding-bottom: 4px;
-            color: rgba(255,255,255,0.18);
-            letter-spacing: 0.5px;
-        }
+        .reset { display: block; margin: 0 12px 14px; width: calc(100% - 24px); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.5); padding: 12px; border-radius: 12px; font-size: 13px; font-family: inherit; font-weight: 700; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: background 0.1s, color 0.1s; }
+        .reset:active { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
+        footer { text-align: center; font-size: 11px; padding-bottom: 4px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
@@ -430,137 +97,169 @@
     <div class="header">
         <div class="logo">
             <svg class="kubb-icon" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Shaft -->
                 <rect x="14" y="10" width="6" height="20" rx="1.5" fill="#a0622a" stroke="#c8843e" stroke-width="1.2"/>
-                <!-- Base -->
                 <rect x="9" y="27" width="16" height="4" rx="1.5" fill="#6b3e18" stroke="#c8843e" stroke-width="1.2"/>
-                <!-- Crown cross horizontal -->
                 <rect x="9" y="7" width="16" height="4" rx="1.5" fill="#c8960a" stroke="#f0c030" stroke-width="1"/>
-                <!-- Crown cross vertical top -->
                 <rect x="14" y="3" width="6" height="8" rx="1.5" fill="#c8960a" stroke="#f0c030" stroke-width="1"/>
-                <!-- Crown tips -->
                 <circle cx="9" cy="7" r="2" fill="#f0c030"/>
                 <circle cx="25" cy="7" r="2" fill="#f0c030"/>
                 <circle cx="17" cy="3" r="2" fill="#f0c030"/>
             </svg>
             <div>
-                <div style="font-size:9px;font-weight:700;color:rgba(240,192,48,0.7);letter-spacing:3px;text-transform:uppercase;margin-bottom:1px;">Virtuell</div>
+                <div class="tagline">International &middot; Virtual</div>
                 <h1>Kubb</h1>
             </div>
         </div>
         <div class="player-wrap">
-            <span class="crown">♛</span>
-            <input type="text" id="playerName" value="Jens" maxlength="12"
-                   autocorrect="off" autocapitalize="words" spellcheck="false"
-                   style="-webkit-user-select:auto; user-select:auto;">
+            <span class="crown">&#9819;</span>
+            <input type="text" id="playerName" value="Jens" maxlength="12" autocorrect="off" autocapitalize="words" spellcheck="false">
         </div>
     </div>
 
-    <div class="rounds" id="rows"></div>
+    <div class="lang-bar" id="langWrap"></div>
 
+    <div class="rounds" id="rows"></div>
     <div class="divider"></div>
 
     <div class="summary">
-        <span class="summary-label">Zwischensumme</span>
+        <span class="summary-label" id="lblInterim">Zwischensumme</span>
         <span class="summary-val" id="interim">0 Pkt</span>
     </div>
 
     <div id="bonusBox" class="bonus" style="display:none;">
-        <div class="bonus-title">♛ König-Bonus · 8 m</div>
+        <div class="bonus-title" id="lblBonus">&#9819; König-Bonus · 8 m</div>
         <div class="bonus-row">
-            <button class="step" id="bonusMinus">−</button>
+            <button class="step" id="bonusMinus">&#8722;</button>
             <span class="bonus-count" id="bonusHits">0</span>
             <button class="step" id="bonusPlus">+</button>
             <span class="bonus-eq">× 8 = <strong id="bonusPreview">0</strong></span>
-            <button id="applyBonusBtn">Anrechnen</button>
+            <button id="applyBonusBtn"></button>
         </div>
     </div>
 
     <div class="final">
-        <span class="final-label">Endstand</span>
+        <span class="final-label" id="lblFinal">Endstand</span>
         <div class="final-right">
             <span class="final-val" id="finalScore">0</span>
-            <span class="final-unit">Pkt</span>
+            <span class="final-unit" id="lblPts">Pkt</span>
         </div>
     </div>
 
-    <button class="reset" id="resetBtn">Neue Runde</button>
-    <footer>© Jens Pergande 2026</footer>
+    <button class="reset" id="resetBtn"></button>
+    <footer>&#169; Jens Pergande 2026</footer>
 
 </div>
 <script>
-    const rounds = [
-        { name: "4 m", mult: 4, hits: 0 },
-        { name: "5 m", mult: 5, hits: 0 },
-        { name: "6 m", mult: 6, hits: 0 },
-        { name: "7 m", mult: 7, hits: 0 },
-        { name: "8 m", mult: 8, hits: 0 }
+    var langs = {
+        de: { code:"DE", interim:"Zwischensumme", bonus:"König-Bonus · 8 m", king:"König freigeschaltet", apply:"Anrechnen", applied:"OK", final:"Endstand", pts:"Pkt", reset:"Neue Runde" },
+        en: { code:"EN", interim:"Subtotal", bonus:"King Bonus · 8 m", king:"King unlocked", apply:"Apply", applied:"OK", final:"Final Score", pts:"Pts", reset:"New Round" },
+        fr: { code:"FR", interim:"Sous-total", bonus:"Bonus Roi · 8 m", king:"Roi déverrouillé", apply:"Valider", applied:"OK", final:"Score final", pts:"Pts", reset:"Nouvelle manche" },
+        es: { code:"ES", interim:"Subtotal", bonus:"Bono Rey · 8 m", king:"Rey desbloqueado", apply:"Aplicar", applied:"OK", final:"Puntuación final", pts:"Pts", reset:"Nueva ronda" },
+        it: { code:"IT", interim:"Subtotale", bonus:"Bonus Re · 8 m", king:"Re sbloccato", apply:"Applica", applied:"OK", final:"Punteggio finale", pts:"Pts", reset:"Nuovo round" },
+        cs: { code:"CS", interim:"Mezisoučet", bonus:"Bonus krále · 8 m", king:"Král odemčen", apply:"Potvrdit", applied:"OK", final:"Výsledek", pts:"Bd", reset:"Nové kolo" },
+        sl: { code:"SL", interim:"Vmesni seštevek", bonus:"Bonus kralja · 8 m", king:"Kralj odklenjen", apply:"Potrdi", applied:"OK", final:"Končni rezultat", pts:"Točke", reset:"Nova runda" },
+        pl: { code:"PL", interim:"Suma częściowa", bonus:"Bonus króla · 8 m", king:"Król odblokowany", apply:"Zatwierdź", applied:"OK", final:"Wynik końcowy", pts:"Pkt", reset:"Nowa runda" }
+    };
+
+    var currentLang = "de";
+    var bonusHitCount = 0;
+    var bonusApplied = false;
+
+    var rounds = [
+        { name:"4 m", mult:4, hits:0 },
+        { name:"5 m", mult:5, hits:0 },
+        { name:"6 m", mult:6, hits:0 },
+        { name:"7 m", mult:7, hits:0 },
+        { name:"8 m", mult:8, hits:0 }
     ];
 
-    let bonusHitCount = 0;
-    let bonusApplied = false;
+    function t() { return langs[currentLang]; }
+    function getPoints(h,m) { return h===6 ? 7*m : h*m; }
+    function totalWithoutBonus() { return rounds.reduce(function(s,r){ return s+getPoints(r.hits,r.mult); },0); }
+    function countSpecials() { return rounds.filter(function(r){ return r.hits===6; }).length; }
 
-    function getPoints(hits, mult) {
-        return hits === 6 ? 7 * mult : hits * mult;
+    function applyLang() {
+        var l = t();
+        document.getElementById("lblInterim").textContent = l.interim;
+        document.getElementById("lblBonus").textContent = l.bonus;
+        document.getElementById("lblFinal").textContent = l.final;
+        document.getElementById("lblPts").textContent = l.pts;
+        document.getElementById("resetBtn").textContent = l.reset;
+        var btn = document.getElementById("applyBonusBtn");
+        btn.textContent = bonusApplied ? l.applied : l.apply;
+        var interim = totalWithoutBonus();
+        document.getElementById("interim").textContent = interim + " " + l.pts;
+        document.getElementById("finalScore").textContent = interim + (bonusHitCount * 8);
+        document.querySelectorAll(".lang-btn").forEach(function(b){
+            b.classList.toggle("active", b.dataset.lang === currentLang);
+        });
+        render();
     }
 
-    function totalWithoutBonus() {
-        return rounds.reduce((s, r) => s + getPoints(r.hits, r.mult), 0);
-    }
-
-    function countSpecials() {
-        return rounds.filter(r => r.hits === 6).length;
+    function buildLangButtons() {
+        var wrap = document.getElementById("langWrap");
+        Object.keys(langs).forEach(function(key) {
+            var btn = document.createElement("button");
+            btn.className = "lang-btn" + (key===currentLang ? " active" : "");
+            btn.textContent = langs[key].code;
+            btn.dataset.lang = key;
+            btn.addEventListener("touchstart", function(e) {
+                e.preventDefault();
+                currentLang = key;
+                applyLang();
+            }, { passive:false });
+            wrap.appendChild(btn);
+        });
     }
 
     function render() {
-        const container = document.getElementById("rows");
+        var container = document.getElementById("rows");
         container.innerHTML = "";
-
-        rounds.forEach((r, i) => {
-            const pts = getPoints(r.hits, r.mult);
-            const isKing = r.hits === 6;
-
-            const row = document.createElement("div");
+        var l = t();
+        rounds.forEach(function(r, i) {
+            var pts = getPoints(r.hits, r.mult);
+            var isKing = r.hits === 6;
+            var row = document.createElement("div");
             row.className = "round-row";
 
-            const dist = document.createElement("div");
+            var dist = document.createElement("div");
             dist.className = "dist" + (isKing ? " is-king" : "");
             dist.textContent = r.name;
 
-            const hitsEl = document.createElement("div");
+            var hitsEl = document.createElement("div");
             hitsEl.className = "hits";
 
-            const minus = document.createElement("button");
+            var minus = document.createElement("button");
             minus.textContent = "−";
-            minus.addEventListener("touchstart", e => {
+            minus.addEventListener("touchstart", function(e) {
                 e.preventDefault();
                 if (rounds[i].hits > 0) { rounds[i].hits--; bonusApplied = false; updateAll(); }
-            }, { passive: false });
+            }, { passive:false });
 
-            const pipsEl = document.createElement("div");
+            var pipsEl = document.createElement("div");
             pipsEl.className = "kubb-pips";
-            for (let p = 0; p < 6; p++) {
-                const pip = document.createElement("div");
-                let cls = "pip";
-                if (p < r.hits) cls += p === 5 ? " active king-pip" : " active";
+            for (var p = 0; p < 6; p++) {
+                var pip = document.createElement("div");
+                var cls = "pip";
+                if (p < r.hits) cls += p===5 ? " active king-pip" : " active";
                 pip.className = cls;
                 pipsEl.appendChild(pip);
             }
 
-            const plus = document.createElement("button");
+            var plus = document.createElement("button");
             plus.textContent = "+";
-            plus.addEventListener("touchstart", e => {
+            plus.addEventListener("touchstart", function(e) {
                 e.preventDefault();
                 if (rounds[i].hits < 6) { rounds[i].hits++; bonusApplied = false; updateAll(); }
-            }, { passive: false });
+            }, { passive:false });
 
             hitsEl.appendChild(minus);
             hitsEl.appendChild(pipsEl);
             hitsEl.appendChild(plus);
 
-            const points = document.createElement("div");
+            var points = document.createElement("div");
             points.className = "points" + (isKing ? " king-pts" : "");
-            points.textContent = pts + " Pkt";
+            points.textContent = pts + " " + l.pts;
 
             row.appendChild(dist);
             row.appendChild(hitsEl);
@@ -568,21 +267,20 @@
             container.appendChild(row);
 
             if (isKing) {
-                const strip = document.createElement("div");
+                var strip = document.createElement("div");
                 strip.className = "king-strip show";
-                strip.textContent = "♛ König freigeschaltet";
+                strip.textContent = l.king;
                 container.appendChild(strip);
             }
         });
     }
 
     function updateAll() {
-        const interim = totalWithoutBonus();
-        document.getElementById("interim").textContent = interim + " Pkt";
-
-        const specials = countSpecials();
-        const bonusBox = document.getElementById("bonusBox");
-
+        var interim = totalWithoutBonus();
+        var l = t();
+        document.getElementById("interim").textContent = interim + " " + l.pts;
+        var specials = countSpecials();
+        var bonusBox = document.getElementById("bonusBox");
         if (specials > 0) {
             bonusBox.style.display = "block";
             if (bonusHitCount > specials) bonusHitCount = specials;
@@ -593,46 +291,45 @@
             bonusApplied = false;
             bonusHitCount = 0;
         }
-
         document.getElementById("finalScore").textContent = interim + (bonusHitCount * 8);
         render();
     }
 
-    document.getElementById("bonusPlus").addEventListener("touchstart", e => {
+    document.getElementById("bonusPlus").addEventListener("touchstart", function(e) {
         e.preventDefault();
-        const s = countSpecials();
+        var s = countSpecials();
         if (!bonusApplied && s > 0 && bonusHitCount < s) { bonusHitCount++; updateAll(); }
-    }, { passive: false });
+    }, { passive:false });
 
-    document.getElementById("bonusMinus").addEventListener("touchstart", e => {
+    document.getElementById("bonusMinus").addEventListener("touchstart", function(e) {
         e.preventDefault();
         if (!bonusApplied && bonusHitCount > 0) { bonusHitCount--; updateAll(); }
-    }, { passive: false });
+    }, { passive:false });
 
-    document.getElementById("applyBonusBtn").addEventListener("touchstart", e => {
+    document.getElementById("applyBonusBtn").addEventListener("touchstart", function(e) {
         e.preventDefault();
         if (countSpecials() > 0 && !bonusApplied) {
             bonusApplied = true;
-            const btn = document.getElementById("applyBonusBtn");
+            var btn = document.getElementById("applyBonusBtn");
             btn.classList.add("applied");
-            btn.textContent = "✓ OK";
+            btn.textContent = t().applied;
             updateAll();
         }
-    }, { passive: false });
+    }, { passive:false });
 
-    document.getElementById("resetBtn").addEventListener("touchstart", e => {
+    document.getElementById("resetBtn").addEventListener("touchstart", function(e) {
         e.preventDefault();
-        rounds.forEach(r => r.hits = 0);
+        rounds.forEach(function(r){ r.hits = 0; });
         bonusHitCount = 0;
         bonusApplied = false;
-        const btn = document.getElementById("applyBonusBtn");
+        var btn = document.getElementById("applyBonusBtn");
         btn.classList.remove("applied");
-        btn.textContent = "Anrechnen";
+        btn.textContent = t().apply;
         updateAll();
-    }, { passive: false });
+    }, { passive:false });
 
-    document.getElementById("playerName").addEventListener("input", function() {});
-
+    buildLangButtons();
+    applyLang();
     updateAll();
 </script>
 </body>
