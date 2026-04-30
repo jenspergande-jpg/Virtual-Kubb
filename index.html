@@ -144,7 +144,7 @@
         return h * m;
       };
 
-      const bonusEligible = hits.filter((h, i) => h === 5 && throwCount[i] !== null).length;
+      const bonusEligible = hits.filter((h, i) => h === 5 && throwCount[i] === 5 && kingResult[i] !== null).length;
       const basePoints = hits.reduce((s, _, i) => s + calcRow(i), 0);
       const bonusPoints = bonusApplied ? bonusCount * 8 : 0;
       const total = basePoints + bonusPoints;
