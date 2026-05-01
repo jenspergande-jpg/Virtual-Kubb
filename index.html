@@ -143,7 +143,6 @@
       const [bonusCount, setBonusCount] = useState(0);
       const [bonusApplied, setBonusApplied] = useState(false);
       const [challengeMode, setChallengeMode] = useState(false);
-      const [locked, setLocked] = useState(false);
       const [startTime, setStartTime] = useState(null);
       const [clock, setClock] = useState("");
 
@@ -215,7 +214,7 @@
         }).join("\n");
         const subject = `Kubb Challenge – ${name} – ${dateStr} ${endTime}`;
         const body = `KUBB VIRTUAL CHALLENGE\n\nName: ${name}\nVerein: ${club}\nRunde: ${round}\nDatum: ${dateStr}\nStart: ${startTimeStr}\nEnde: ${endTime}\n\nEinzelergebnisse:\n${rowDetails}\n\nZwischensumme: ${basePoints} Pkt\nBonus (${bonusCount} × 8): ${bonusPoints} Pkt\n\nENDSTAND: ${total} Pkt`;
-        setLocked(true);
+        
         window.location.href = `mailto:${CHALLENGE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       };
 
@@ -249,12 +248,12 @@
               </span>
               {challengeMode && <div style={{fontSize:'18px', fontWeight:'900', color:'#f0d890', letterSpacing:'2px', marginTop:'2px'}}>{clock}</div>}
             </div>
-            <button className={"toggle" + (challengeMode ? " on" : "")} onClick={toggleChallenge} disabled={locked}>
+            <button className={"toggle" + (challengeMode ? " on" : "")} onClick={toggleChallenge}>
               <div className="toggle-knob"></div>
             </button>
           </div>
 
-          <div className="main-card" style={{opacity: locked ? 0.6 : 1, pointerEvents: locked ? 'none' : 'auto'}}>
+          <div className="main-card">
             {DISTANCES.map((dist, i) => {
               const h = hits[i], m = MULTIPLIERS[i];
               const full = h === 5 && throwCount[i] !== null;
@@ -329,11 +328,8 @@
             </div>
 
             <button className="new-round-btn" onClick={reset}>{t.newRound}</button>
-            {challengeMode && !locked && (
+            {challengeMode && (
               <button className="submit-btn" onClick={sendChallenge}>{t.submit}</button>
-            )}
-            {locked && (
-              <div className="submit-btn" style={{background:'#5a3e10', color:'rgba(240,216,144,0.5)', cursor:'not-allowed', textAlign:'center'}}>🔒 {t.locked}</div>
             )}
             <div className="copyright">© Jens Pergande 2026</div>
           </div>
