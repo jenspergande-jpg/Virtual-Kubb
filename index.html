@@ -84,35 +84,35 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
     const MULTIPLIERS = [4, 5, 6, 7, 8];
     const DISTANCES = ["4 m", "5 m", "6 m", "7 m", "8 m"];
 
     const TRANSLATIONS = {
-      DE: { title: "KUBB", sub: "INTERNATIONAL · VIRTUAL", name: "Name", round: "Runde", king: "KÖNIG FREIGESCHALTET", kingBonus: "KÖNIG-BONUS · 8 M", intermediate: "ZWISCHENSUMME", final: "ENDSTAND", newRound: "NEUE RUNDE", pts: "Pkt", apply: "OK", throws5: "5 Würfe", throws6: "6 Würfe", kingHit: "TREFFER", kingMiss: "VERFEHLT", possible: "MÖGLICH" },
-      EN: { title: "KUBB", sub: "INTERNATIONAL · VIRTUAL", name: "Name", round: "Round", king: "KING UNLOCKED", kingBonus: "KING BONUS · 8 M", intermediate: "SUBTOTAL", final: "FINAL SCORE", newRound: "NEW ROUND", pts: "Pts", apply: "OK", throws5: "5 throws", throws6: "6 throws", kingHit: "HIT", kingMiss: "MISSED", possible: "POSSIBLE" },
-      FR: { title: "KUBB", sub: "INTERNATIONAL · VIRTUAL", name: "Nom", round: "Manche", king: "ROI DÉBLOQUÉ", kingBonus: "BONUS ROI · 8 M", intermediate: "SOUS-TOTAL", final: "SCORE FINAL", newRound: "NOUVEAU TOUR", pts: "Pts", apply: "OK", throws5: "5 lancers", throws6: "6 lancers", kingHit: "TOUCHÉ", kingMiss: "RATÉ", possible: "POSSIBLE" },
-      ES: { title: "KUBB", sub: "INTERNACIONAL · VIRTUAL", name: "Nombre", round: "Ronda", king: "REY DESBLOQUEADO", kingBonus: "BONO REY · 8 M", intermediate: "SUBTOTAL", final: "PUNTUACIÓN FINAL", newRound: "NUEVA RONDA", pts: "Pts", apply: "OK", throws5: "5 lanzam.", throws6: "6 lanzam.", kingHit: "TOCADO", kingMiss: "FALLADO", possible: "POSIBLE" },
-      IT: { title: "KUBB", sub: "INTERNAZIONALE · VIRTUALE", name: "Nome", round: "Round", king: "RE SBLOCCATO", kingBonus: "BONUS RE · 8 M", intermediate: "SUBTOTALE", final: "PUNTEGGIO FINALE", newRound: "NUOVO ROUND", pts: "Pti", apply: "OK", throws5: "5 lanci", throws6: "6 lanci", kingHit: "COLPITO", kingMiss: "MANCATO", possible: "POSSIBILE" },
-      NL: { title: "KUBB", sub: "INTERNATIONAAL · VIRTUEEL", name: "Naam", round: "Ronde", king: "KONING ONTGRENDELD", kingBonus: "KONINGSBONUS · 8 M", intermediate: "SUBTOTAAL", final: "EINDSTAND", newRound: "NIEUWE RONDE", pts: "Pnt", apply: "OK", throws5: "5 worpen", throws6: "6 worpen", kingHit: "RAAK", kingMiss: "MIS", possible: "MOGELIJK" },
-      PT: { title: "KUBB", sub: "INTERNACIONAL · VIRTUAL", name: "Nome", round: "Ronda", king: "REI DESBLOQUEADO", kingBonus: "BÓNUS REI · 8 M", intermediate: "SUBTOTAL", final: "PONTUAÇÃO FINAL", newRound: "NOVA RONDA", pts: "Pts", apply: "OK", throws5: "5 lançam.", throws6: "6 lançam.", kingHit: "ACERTO", kingMiss: "FALHOU", possible: "POSSÍVEL" },
-      CS: { title: "KUBB", sub: "MEZINÁRODNÍ · VIRTUÁLNÍ", name: "Jméno", round: "Kolo", king: "KRÁL ODEMČEN", kingBonus: "BONUS KRÁLE · 8 M", intermediate: "MEZISOUČET", final: "KONEČNÉ SKÓRE", newRound: "NOVÉ KOLO", pts: "Bod", apply: "OK", throws5: "5 hodů", throws6: "6 hodů", kingHit: "ZÁSAH", kingMiss: "MINUL", possible: "MOŽNÉ" },
-      SK: { title: "KUBB", sub: "MEDZINÁRODNÝ · VIRTUÁLNY", name: "Meno", round: "Kolo", king: "KRÁĽ ODOMKNUTÝ", kingBonus: "BONUS KRÁĽA · 8 M", intermediate: "MEDZISÚČET", final: "KONEČNÉ SKÓRE", newRound: "NOVÉ KOLO", pts: "Bod", apply: "OK", throws5: "5 hodov", throws6: "6 hodov", kingHit: "ZÁSAH", kingMiss: "MINUL", possible: "MOŽNÉ" },
-      PL: { title: "KUBB", sub: "MIĘDZYNARODOWY · WIRTUALNY", name: "Imię", round: "Runda", king: "KRÓL ODBLOKOWANY", kingBonus: "BONUS KRÓLA · 8 M", intermediate: "SUMA CZĘŚCIOWA", final: "WYNIK KOŃCOWY", newRound: "NOWA RUNDA", pts: "Pkt", apply: "OK", throws5: "5 rzutów", throws6: "6 rzutów", kingHit: "TRAFIONY", kingMiss: "PUDŁO", possible: "MOŻLIWE" },
-      HU: { title: "KUBB", sub: "NEMZETKÖZI · VIRTUÁLIS", name: "Név", round: "Kör", king: "KIRÁLY FELOLDVA", kingBonus: "KIRÁLY BÓNUSZ · 8 M", intermediate: "RÉSZÖSSZEG", final: "VÉGEREDMÉNY", newRound: "ÚJ KÖR", pts: "Pont", apply: "OK", throws5: "5 dobás", throws6: "6 dobás", kingHit: "TALÁLAT", kingMiss: "MELLÉ", possible: "LEHETSÉGES" },
-      RO: { title: "KUBB", sub: "INTERNAȚIONAL · VIRTUAL", name: "Nume", round: "Rundă", king: "REGELE DEBLOCAT", kingBonus: "BONUS REGE · 8 M", intermediate: "SUBTOTAL", final: "SCOR FINAL", newRound: "RUNDĂ NOUĂ", pts: "Pct", apply: "OK", throws5: "5 aruncări", throws6: "6 aruncări", kingHit: "LOVIT", kingMiss: "RATAT", possible: "POSIBILE" },
-      HR: { title: "KUBB", sub: "MEĐUNARODNI · VIRTUALNI", name: "Ime", round: "Runda", king: "KRALJ OTKLJUČAN", kingBonus: "BONUS KRALJA · 8 M", intermediate: "MEĐUZBROJ", final: "KONAČNI REZULTAT", newRound: "NOVA RUNDA", pts: "Bod", apply: "OK", throws5: "5 bacanja", throws6: "6 bacanja", kingHit: "POGODAK", kingMiss: "PROMAŠAJ", possible: "MOGUĆE" },
-      SL: { title: "KUBB", sub: "MEDNARODNI · VIRTUALNI", name: "Ime", round: "Runda", king: "KRALJ ODKLENJEN", kingBonus: "BONUS KRALJA · 8 M", intermediate: "VMESNI SEŠTEVEK", final: "KONČNI REZULTAT", newRound: "NOVA RUNDA", pts: "Točk", apply: "OK", throws5: "5 metov", throws6: "6 metov", kingHit: "ZADETEK", kingMiss: "ZGREŠIL", possible: "MOŽNO" },
-      SV: { title: "KUBB", sub: "INTERNATIONELLT · VIRTUELLT", name: "Namn", round: "Omgång", king: "KUNGEN UPPLÅST", kingBonus: "KUNGBONUS · 8 M", intermediate: "DELSUMMA", final: "SLUTRESULTAT", newRound: "NY OMGÅNG", pts: "Poäng", apply: "OK", throws5: "5 kast", throws6: "6 kast", kingHit: "TRÄFF", kingMiss: "MISS", possible: "MÖJLIGA" },
-      DA: { title: "KUBB", sub: "INTERNATIONALT · VIRTUELT", name: "Navn", round: "Runde", king: "KONGEN LÅST OP", kingBonus: "KONGEBONUS · 8 M", intermediate: "DELTOTAL", final: "SLUTRESULTAT", newRound: "NY RUNDE", pts: "Point", apply: "OK", throws5: "5 kast", throws6: "6 kast", kingHit: "RAMT", kingMiss: "FORBI", possible: "MULIGE" },
-      NO: { title: "KUBB", sub: "INTERNASJONALT · VIRTUELT", name: "Navn", round: "Runde", king: "KONGEN LÅST OPP", kingBonus: "KONGEBONUS · 8 M", intermediate: "DELSUM", final: "SLUTTRESULTAT", newRound: "NY RUNDE", pts: "Poeng", apply: "OK", throws5: "5 kast", throws6: "6 kast", kingHit: "TREFF", kingMiss: "BOM", possible: "MULIGE" },
-      FI: { title: "KUBB", sub: "KANSAINVÄLINEN · VIRTUAALINEN", name: "Nimi", round: "Kierros", king: "KUNINGAS VAPAUTETTU", kingBonus: "KUNINGASBONUS · 8 M", intermediate: "VÄLISUMMA", final: "LOPPUTULOS", newRound: "UUSI KIERROS", pts: "Piste", apply: "OK", throws5: "5 heittoa", throws6: "6 heittoa", kingHit: "OSUI", kingMiss: "OHITTI", possible: "MAHDOLLISTA" },
-      EL: { title: "KUBB", sub: "ΔΙΕΘΝΕΣ · ΕΙΚΟΝΙΚΟ", name: "Όνομα", round: "Γύρος", king: "ΒΑΣΙΛΙΑΣ ΞΕΚΛΕΙΔΩΘΗΚΕ", kingBonus: "ΜΠΟΝΟΥΣ ΒΑΣΙΛΙΑ · 8 M", intermediate: "ΥΠΟΣΥΝΟΛΟ", final: "ΤΕΛΙΚΟ ΣΚΟΡ", newRound: "ΝΕΟΣ ΓΥΡΟΣ", pts: "Πόντοι", apply: "ΟΚ", throws5: "5 ρίψεις", throws6: "6 ρίψεις", kingHit: "ΕΠΙΤΥΧΙΑ", kingMiss: "ΑΣΤΟΧΙΑ", possible: "ΔΥΝΑΤΌΝ" },
-      BG: { title: "KUBB", sub: "МЕЖДУНАРОДЕН · ВИРТУАЛЕН", name: "Име", round: "Рунд", king: "КРАЛЯТ Е ОТКЛЮЧЕН", kingBonus: "БОНУС КРАЛ · 8 М", intermediate: "МЕЖДИННА СУМА", final: "КРАЕН РЕЗУЛТАТ", newRound: "НОВ РУНД", pts: "Точки", apply: "ОК", throws5: "5 хвърляния", throws6: "6 хвърляния", kingHit: "ПОПАДЕНИЕ", kingMiss: "ПРОПУСК", possible: "ВЪЗМОЖНИ" },
-      SR: { title: "KUBB", sub: "МЕЂУНАРОДНИ · ВИРТУЕЛНИ", name: "Име", round: "Рунда", king: "КРАЉ ОТКЉУЧАН", kingBonus: "БОНУС КРАЉА · 8 М", intermediate: "МЕЂУЗБИР", final: "КОНАЧНИ РЕЗУЛТАТ", newRound: "НОВА РУНДА", pts: "Бод", apply: "ОК", throws5: "5 бацања", throws6: "6 бацања", kingHit: "ПОГОДАК", kingMiss: "ПРОМАШАЈ", possible: "МОГУЋЕ" },
-      UK: { title: "KUBB", sub: "МІЖНАРОДНИЙ · ВІРТУАЛЬНИЙ", name: "Ім'я", round: "Раунд", king: "КОРОЛЬ РОЗБЛОКОВАНО", kingBonus: "БОНУС КОРОЛЯ · 8 М", intermediate: "ПРОМІЖНИЙ ПІДСУМОК", final: "КІНЦЕВИЙ РЕЗУЛЬТАТ", newRound: "НОВИЙ РАУНД", pts: "Очки", apply: "ОК", throws5: "5 кидків", throws6: "6 кидків", kingHit: "ВЛУЧАННЯ", kingMiss: "ПРОМАХ", possible: "МОЖЛИВО" },
-      TR: { title: "KUBB", sub: "ULUSLARARASI · SANAL", name: "İsim", round: "Tur", king: "KRAL KİLİDİ AÇILDI", kingBonus: "KRAL BONUSU · 8 M", intermediate: "ARA TOPLAM", final: "FINAL SKORU", newRound: "YENİ TUR", pts: "Puan", apply: "OK", throws5: "5 atış", throws6: "6 atış", kingHit: "İSABET", kingMiss: "KAÇIRDI", possible: "MÜMKÜN" },
+      DE: { title: "KUBB", sub: "INTERNATIONAL · VIRTUAL", name: "Name", club: "Verein", round: "Runde", king: "KÖNIG FREIGESCHALTET", kingBonus: "KÖNIG-BONUS · 8 M", intermediate: "ZWISCHENSUMME", final: "ENDSTAND", newRound: "NEUE RUNDE", pts: "Pkt", apply: "OK", throws5: "5 Würfe", throws6: "6 Würfe", kingHit: "TREFFER", kingMiss: "VERFEHLT", possible: "MÖGLICH", challengeOff: "CHALLENGE MODUS", challengeOn: "🏆 CHALLENGE AKTIV", submit: "🏆 ERGEBNIS EINREICHEN", locked: "EINGABE GESPERRT" },
+      EN: { title: "KUBB", sub: "INTERNATIONAL · VIRTUAL", name: "Name", club: "Club", round: "Round", king: "KING UNLOCKED", kingBonus: "KING BONUS · 8 M", intermediate: "SUBTOTAL", final: "FINAL SCORE", newRound: "NEW ROUND", pts: "Pts", apply: "OK", throws5: "5 throws", throws6: "6 throws", kingHit: "HIT", kingMiss: "MISSED", possible: "POSSIBLE", challengeOff: "CHALLENGE MODE", challengeOn: "🏆 CHALLENGE ACTIVE", submit: "🏆 SUBMIT RESULT", locked: "INPUT LOCKED" },
+      FR: { title: "KUBB", sub: "INTERNATIONAL · VIRTUAL", name: "Nom", club: "Club", round: "Manche", king: "ROI DÉBLOQUÉ", kingBonus: "BONUS ROI · 8 M", intermediate: "SOUS-TOTAL", final: "SCORE FINAL", newRound: "NOUVEAU TOUR", pts: "Pts", apply: "OK", throws5: "5 lancers", throws6: "6 lancers", kingHit: "TOUCHÉ", kingMiss: "RATÉ", possible: "POSSIBLE", challengeOff: "MODE CHALLENGE", challengeOn: "🏆 CHALLENGE ACTIF", submit: "🏆 SOUMETTRE RÉSULTAT", locked: "SAISIE VERROUILLÉE" },
+      ES: { title: "KUBB", sub: "INTERNACIONAL · VIRTUAL", name: "Nombre", club: "Club", round: "Ronda", king: "REY DESBLOQUEADO", kingBonus: "BONO REY · 8 M", intermediate: "SUBTOTAL", final: "PUNTUACIÓN FINAL", newRound: "NUEVA RONDA", pts: "Pts", apply: "OK", throws5: "5 lanzam.", throws6: "6 lanzam.", kingHit: "TOCADO", kingMiss: "FALLADO", possible: "POSIBLE", challengeOff: "MODO CHALLENGE", challengeOn: "🏆 CHALLENGE ACTIVO", submit: "🏆 ENVIAR RESULTADO", locked: "ENTRADA BLOQUEADA" },
+      IT: { title: "KUBB", sub: "INTERNAZIONALE · VIRTUALE", name: "Nome", club: "Club", round: "Round", king: "RE SBLOCCATO", kingBonus: "BONUS RE · 8 M", intermediate: "SUBTOTALE", final: "PUNTEGGIO FINALE", newRound: "NUOVO ROUND", pts: "Pti", apply: "OK", throws5: "5 lanci", throws6: "6 lanci", kingHit: "COLPITO", kingMiss: "MANCATO", possible: "POSSIBILE", challengeOff: "MODALITÀ CHALLENGE", challengeOn: "🏆 CHALLENGE ATTIVO", submit: "🏆 INVIA RISULTATO", locked: "INSERIMENTO BLOCCATO" },
+      NL: { title: "KUBB", sub: "INTERNATIONAAL · VIRTUEEL", name: "Naam", club: "Club", round: "Ronde", king: "KONING ONTGRENDELD", kingBonus: "KONINGSBONUS · 8 M", intermediate: "SUBTOTAAL", final: "EINDSTAND", newRound: "NIEUWE RONDE", pts: "Pnt", apply: "OK", throws5: "5 worpen", throws6: "6 worpen", kingHit: "RAAK", kingMiss: "MIS", possible: "MOGELIJK", challengeOff: "CHALLENGE MODUS", challengeOn: "🏆 CHALLENGE ACTIEF", submit: "🏆 RESULTAAT INDIENEN", locked: "INVOER VERGRENDELD" },
+      PT: { title: "KUBB", sub: "INTERNACIONAL · VIRTUAL", name: "Nome", club: "Clube", round: "Ronda", king: "REI DESBLOQUEADO", kingBonus: "BÓNUS REI · 8 M", intermediate: "SUBTOTAL", final: "PONTUAÇÃO FINAL", newRound: "NOVA RONDA", pts: "Pts", apply: "OK", throws5: "5 lançam.", throws6: "6 lançam.", kingHit: "ACERTO", kingMiss: "FALHOU", possible: "POSSÍVEL", challengeOff: "MODO CHALLENGE", challengeOn: "🏆 CHALLENGE ATIVO", submit: "🏆 ENVIAR RESULTADO", locked: "ENTRADA BLOQUEADA" },
+      CS: { title: "KUBB", sub: "MEZINÁRODNÍ · VIRTUÁLNÍ", name: "Jméno", club: "Klub", round: "Kolo", king: "KRÁL ODEMČEN", kingBonus: "BONUS KRÁLE · 8 M", intermediate: "MEZISOUČET", final: "KONEČNÉ SKÓRE", newRound: "NOVÉ KOLO", pts: "Bod", apply: "OK", throws5: "5 hodů", throws6: "6 hodů", kingHit: "ZÁSAH", kingMiss: "MINUL", possible: "MOŽNÉ", challengeOff: "CHALLENGE REŽIM", challengeOn: "🏆 CHALLENGE AKTIVNÍ", submit: "🏆 ODESLAT VÝSLEDEK", locked: "VSTUP UZAMČEN" },
+      SK: { title: "KUBB", sub: "MEDZINÁRODNÝ · VIRTUÁLNY", name: "Meno", club: "Klub", round: "Kolo", king: "KRÁĽ ODOMKNUTÝ", kingBonus: "BONUS KRÁĽA · 8 M", intermediate: "MEDZISÚČET", final: "KONEČNÉ SKÓRE", newRound: "NOVÉ KOLO", pts: "Bod", apply: "OK", throws5: "5 hodov", throws6: "6 hodov", kingHit: "ZÁSAH", kingMiss: "MINUL", possible: "MOŽNÉ", challengeOff: "CHALLENGE REŽIM", challengeOn: "🏆 CHALLENGE AKTÍVNY", submit: "🏆 ODOSLAŤ VÝSLEDOK", locked: "VSTUP UZAMKNUTÝ" },
+      PL: { title: "KUBB", sub: "MIĘDZYNARODOWY · WIRTUALNY", name: "Imię", club: "Klub", round: "Runda", king: "KRÓL ODBLOKOWANY", kingBonus: "BONUS KRÓLA · 8 M", intermediate: "SUMA CZĘŚCIOWA", final: "WYNIK KOŃCOWY", newRound: "NOWA RUNDA", pts: "Pkt", apply: "OK", throws5: "5 rzutów", throws6: "6 rzutów", kingHit: "TRAFIONY", kingMiss: "PUDŁO", possible: "MOŻLIWE", challengeOff: "TRYB CHALLENGE", challengeOn: "🏆 CHALLENGE AKTYWNY", submit: "🏆 WYŚLIJ WYNIK", locked: "WPROWADZANIE ZABLOKOWANE" },
+      HU: { title: "KUBB", sub: "NEMZETKÖZI · VIRTUÁLIS", name: "Név", club: "Klub", round: "Kör", king: "KIRÁLY FELOLDVA", kingBonus: "KIRÁLY BÓNUSZ · 8 M", intermediate: "RÉSZÖSSZEG", final: "VÉGEREDMÉNY", newRound: "ÚJ KÖR", pts: "Pont", apply: "OK", throws5: "5 dobás", throws6: "6 dobás", kingHit: "TALÁLAT", kingMiss: "MELLÉ", possible: "LEHETSÉGES", challengeOff: "CHALLENGE MÓD", challengeOn: "🏆 CHALLENGE AKTÍV", submit: "🏆 EREDMÉNY BEKÜLDÉSE", locked: "BEVITEL ZÁROLVA" },
+      RO: { title: "KUBB", sub: "INTERNAȚIONAL · VIRTUAL", name: "Nume", club: "Club", round: "Rundă", king: "REGELE DEBLOCAT", kingBonus: "BONUS REGE · 8 M", intermediate: "SUBTOTAL", final: "SCOR FINAL", newRound: "RUNDĂ NOUĂ", pts: "Pct", apply: "OK", throws5: "5 aruncări", throws6: "6 aruncări", kingHit: "LOVIT", kingMiss: "RATAT", possible: "POSIBILE", challengeOff: "MOD CHALLENGE", challengeOn: "🏆 CHALLENGE ACTIV", submit: "🏆 TRIMITE REZULTAT", locked: "INTRODUCERE BLOCATĂ" },
+      HR: { title: "KUBB", sub: "MEĐUNARODNI · VIRTUALNI", name: "Ime", club: "Klub", round: "Runda", king: "KRALJ OTKLJUČAN", kingBonus: "BONUS KRALJA · 8 M", intermediate: "MEĐUZBROJ", final: "KONAČNI REZULTAT", newRound: "NOVA RUNDA", pts: "Bod", apply: "OK", throws5: "5 bacanja", throws6: "6 bacanja", kingHit: "POGODAK", kingMiss: "PROMAŠAJ", possible: "MOGUĆE", challengeOff: "CHALLENGE MOD", challengeOn: "🏆 CHALLENGE AKTIVAN", submit: "🏆 POŠALJI REZULTAT", locked: "UNOS ZAKLJUČAN" },
+      SL: { title: "KUBB", sub: "MEDNARODNI · VIRTUALNI", name: "Ime", club: "Klub", round: "Runda", king: "KRALJ ODKLENJEN", kingBonus: "BONUS KRALJA · 8 M", intermediate: "VMESNI SEŠTEVEK", final: "KONČNI REZULTAT", newRound: "NOVA RUNDA", pts: "Točk", apply: "OK", throws5: "5 metov", throws6: "6 metov", kingHit: "ZADETEK", kingMiss: "ZGREŠIL", possible: "MOŽNO", challengeOff: "CHALLENGE NAČIN", challengeOn: "🏆 CHALLENGE AKTIVEN", submit: "🏆 POŠLJI REZULTAT", locked: "VNOS ZAKLENJEN" },
+      SV: { title: "KUBB", sub: "INTERNATIONELLT · VIRTUELLT", name: "Namn", club: "Klubb", round: "Omgång", king: "KUNGEN UPPLÅST", kingBonus: "KUNGBONUS · 8 M", intermediate: "DELSUMMA", final: "SLUTRESULTAT", newRound: "NY OMGÅNG", pts: "Poäng", apply: "OK", throws5: "5 kast", throws6: "6 kast", kingHit: "TRÄFF", kingMiss: "MISS", possible: "MÖJLIGA", challengeOff: "CHALLENGE-LÄGE", challengeOn: "🏆 CHALLENGE AKTIVT", submit: "🏆 SKICKA RESULTAT", locked: "INMATNING LÅST" },
+      DA: { title: "KUBB", sub: "INTERNATIONALT · VIRTUELT", name: "Navn", club: "Klub", round: "Runde", king: "KONGEN LÅST OP", kingBonus: "KONGEBONUS · 8 M", intermediate: "DELTOTAL", final: "SLUTRESULTAT", newRound: "NY RUNDE", pts: "Point", apply: "OK", throws5: "5 kast", throws6: "6 kast", kingHit: "RAMT", kingMiss: "FORBI", possible: "MULIGE", challengeOff: "CHALLENGE-TILSTAND", challengeOn: "🏆 CHALLENGE AKTIV", submit: "🏆 INDSEND RESULTAT", locked: "INDTASTNING LÅST" },
+      NO: { title: "KUBB", sub: "INTERNASJONALT · VIRTUELT", name: "Navn", club: "Klubb", round: "Runde", king: "KONGEN LÅST OPP", kingBonus: "KONGEBONUS · 8 M", intermediate: "DELSUM", final: "SLUTTRESULTAT", newRound: "NY RUNDE", pts: "Poeng", apply: "OK", throws5: "5 kast", throws6: "6 kast", kingHit: "TREFF", kingMiss: "BOM", possible: "MULIGE", challengeOff: "CHALLENGE-MODUS", challengeOn: "🏆 CHALLENGE AKTIV", submit: "🏆 SEND RESULTAT", locked: "INNDATA LÅST" },
+      FI: { title: "KUBB", sub: "KANSAINVÄLINEN · VIRTUAALINEN", name: "Nimi", club: "Seura", round: "Kierros", king: "KUNINGAS VAPAUTETTU", kingBonus: "KUNINGASBONUS · 8 M", intermediate: "VÄLISUMMA", final: "LOPPUTULOS", newRound: "UUSI KIERROS", pts: "Piste", apply: "OK", throws5: "5 heittoa", throws6: "6 heittoa", kingHit: "OSUI", kingMiss: "OHITTI", possible: "MAHDOLLISTA", challengeOff: "HAASTE-TILA", challengeOn: "🏆 HAASTE AKTIIVINEN", submit: "🏆 LÄHETÄ TULOS", locked: "SYÖTTÖ LUKITTU" },
+      EL: { title: "KUBB", sub: "ΔΙΕΘΝΕΣ · ΕΙΚΟΝΙΚΟ", name: "Όνομα", club: "Σύλλογος", round: "Γύρος", king: "ΒΑΣΙΛΙΑΣ ΞΕΚΛΕΙΔΩΘΗΚΕ", kingBonus: "ΜΠΟΝΟΥΣ ΒΑΣΙΛΙΑ · 8 M", intermediate: "ΥΠΟΣΥΝΟΛΟ", final: "ΤΕΛΙΚΟ ΣΚΟΡ", newRound: "ΝΕΟΣ ΓΥΡΟΣ", pts: "Πόντοι", apply: "ΟΚ", throws5: "5 ρίψεις", throws6: "6 ρίψεις", kingHit: "ΕΠΙΤΥΧΙΑ", kingMiss: "ΑΣΤΟΧΙΑ", possible: "ΔΥΝΑΤΌΝ", challengeOff: "ΛΕΙΤΟΥΡΓΙΑ CHALLENGE", challengeOn: "🏆 CHALLENGE ΕΝΕΡΓΟ", submit: "🏆 ΑΠΟΣΤΟΛΗ ΑΠΟΤΕΛΕΣΜΑΤΟΣ", locked: "ΕΙΣΑΓΩΓΗ ΚΛΕΙΔΩΜΕΝΗ" },
+      BG: { title: "KUBB", sub: "МЕЖДУНАРОДЕН · ВИРТУАЛЕН", name: "Име", club: "Клуб", round: "Рунд", king: "КРАЛЯТ Е ОТКЛЮЧЕН", kingBonus: "БОНУС КРАЛ · 8 М", intermediate: "МЕЖДИННА СУМА", final: "КРАЕН РЕЗУЛТАТ", newRound: "НОВ РУНД", pts: "Точки", apply: "ОК", throws5: "5 хвърляния", throws6: "6 хвърляния", kingHit: "ПОПАДЕНИЕ", kingMiss: "ПРОПУСК", possible: "ВЪЗМОЖНИ", challengeOff: "РЕЖИМ CHALLENGE", challengeOn: "🏆 CHALLENGE АКТИВЕН", submit: "🏆 ИЗПРАТИ РЕЗУЛТАТ", locked: "ВЪВЕЖДАНЕТО Е ЗАКЛЮЧЕНО" },
+      SR: { title: "KUBB", sub: "МЕЂУНАРОДНИ · ВИРТУЕЛНИ", name: "Име", club: "Клуб", round: "Рунда", king: "КРАЉ ОТКЉУЧАН", kingBonus: "БОНУС КРАЉА · 8 М", intermediate: "МЕЂУЗБИР", final: "КОНАЧНИ РЕЗУЛТАТ", newRound: "НОВА РУНДА", pts: "Бод", apply: "ОК", throws5: "5 бацања", throws6: "6 бацања", kingHit: "ПОГОДАК", kingMiss: "ПРОМАШАЈ", possible: "МОГУЋЕ", challengeOff: "CHALLENGE РЕЖим", challengeOn: "🏆 CHALLENGE АКТИВАН", submit: "🏆 ПОШАЉИ РЕЗУЛТАТ", locked: "УНОС ЗАКЉУЧАН" },
+      UK: { title: "KUBB", sub: "МІЖНАРОДНИЙ · ВІРТУАЛЬНИЙ", name: "Ім'я", club: "Клуб", round: "Раунд", king: "КОРОЛЬ РОЗБЛОКОВАНО", kingBonus: "БОНУС КОРОЛЯ · 8 М", intermediate: "ПРОМІЖНИЙ ПІДСУМОК", final: "КІНЦЕВИЙ РЕЗУЛЬТАТ", newRound: "НОВИЙ РАУНД", pts: "Очки", apply: "ОК", throws5: "5 кидків", throws6: "6 кидків", kingHit: "ВЛУЧАННЯ", kingMiss: "ПРОМАХ", possible: "МОЖЛИВО", challengeOff: "РЕЖИМ CHALLENGE", challengeOn: "🏆 CHALLENGE АКТИВНИЙ", submit: "🏆 НАДІСЛАТИ РЕЗУЛЬТАТ", locked: "ВВЕДЕННЯ ЗАБЛОКОВАНО" },
+      TR: { title: "KUBB", sub: "ULUSLARARASI · SANAL", name: "İsim", club: "Kulüp", round: "Tur", king: "KRAL KİLİDİ AÇILDI", kingBonus: "KRAL BONUSU · 8 M", intermediate: "ARA TOPLAM", final: "FINAL SKORU", newRound: "YENİ TUR", pts: "Puan", apply: "OK", throws5: "5 atış", throws6: "6 atış", kingHit: "İSABET", kingMiss: "KAÇIRDI", possible: "MÜMKÜN", challengeOff: "CHALLENGE MODU", challengeOn: "🏆 CHALLENGE AKTİF", submit: "🏆 SONUCU GÖNDER", locked: "GİRİŞ KİLİTLENDİ" },
     };
 
     const LANGS = ["DE","EN","FR","ES","IT","NL","PT","CS","SK","PL","HU","RO","HR","SL","SV","DA","NO","FI","EL","BG","SR","UK","TR"];
@@ -143,6 +143,24 @@
       const [bonusCount, setBonusCount] = useState(0);
       const [bonusApplied, setBonusApplied] = useState(false);
       const [challengeMode, setChallengeMode] = useState(false);
+      const [locked, setLocked] = useState(false);
+      const [startTime, setStartTime] = useState(null);
+      const [clock, setClock] = useState("");
+
+      useEffect(() => {
+        const timer = setInterval(() => {
+          const now = new Date();
+          setClock(now.toLocaleTimeString('de-DE'));
+        }, 1000);
+        return () => clearInterval(timer);
+      }, []);
+
+      const toggleChallenge = () => {
+        if (!challengeMode) setStartTime(new Date());
+        else setStartTime(null);
+        setChallengeMode(!challengeMode);
+        setLocked(false);
+      };
 
       const t = TRANSLATIONS[lang];
 
@@ -185,15 +203,19 @@
       };
 
       const sendChallenge = () => {
-        const date = new Date().toLocaleDateString('de-DE');
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('de-DE');
+        const endTime = now.toLocaleTimeString('de-DE');
+        const startTimeStr = startTime ? startTime.toLocaleTimeString('de-DE') : '–';
         const distNames = ["4m","5m","6m","7m","8m"];
         const rowDetails = hits.map((h, i) => {
           const pts = calcRow(i);
           const king = throwCount[i] === 5 ? (kingResult[i] === true ? " 👑 Treffer" : " 👑 Verfehlt") : "";
           return `  ${distNames[i]}: ${h} Treffer = ${pts} Pkt${king}`;
         }).join("\n");
-        const subject = `Kubb Challenge – ${name} – ${date}`;
-        const body = `KUBB VIRTUAL CHALLENGE\n\nName: ${name}\nVerein: ${club}\nRunde: ${round}\nDatum: ${date}\n\nEinzelergebnisse:\n${rowDetails}\n\nZwischensumme: ${basePoints} Pkt\nBonus (${bonusCount} × 8): ${bonusPoints} Pkt\n\nENDSTAND: ${total} Pkt`;
+        const subject = `Kubb Challenge – ${name} – ${dateStr} ${endTime}`;
+        const body = `KUBB VIRTUAL CHALLENGE\n\nName: ${name}\nVerein: ${club}\nRunde: ${round}\nDatum: ${dateStr}\nStart: ${startTimeStr}\nEnde: ${endTime}\n\nEinzelergebnisse:\n${rowDetails}\n\nZwischensumme: ${basePoints} Pkt\nBonus (${bonusCount} × 8): ${bonusPoints} Pkt\n\nENDSTAND: ${total} Pkt`;
+        setLocked(true);
         window.location.href = `mailto:${CHALLENGE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       };
 
@@ -221,15 +243,18 @@
           </div>
 
           <div className="challenge-bar">
-            <span className={"challenge-label" + (challengeMode ? " active" : "")}>
-              {challengeMode ? "🏆 CHALLENGE MODUS AKTIV" : "CHALLENGE MODUS"}
-            </span>
-            <button className={"toggle" + (challengeMode ? " on" : "")} onClick={() => setChallengeMode(!challengeMode)}>
+            <div>
+              <span className={"challenge-label" + (challengeMode ? " active" : "")}>
+                {challengeMode ? t.challengeOn : t.challengeOff}
+              </span>
+              {challengeMode && <div style={{fontSize:'18px', fontWeight:'900', color:'#f0d890', letterSpacing:'2px', marginTop:'2px'}}>{clock}</div>}
+            </div>
+            <button className={"toggle" + (challengeMode ? " on" : "")} onClick={toggleChallenge} disabled={locked}>
               <div className="toggle-knob"></div>
             </button>
           </div>
 
-          <div className="main-card">
+          <div className="main-card" style={{opacity: locked ? 0.6 : 1, pointerEvents: locked ? 'none' : 'auto'}}>
             {DISTANCES.map((dist, i) => {
               const h = hits[i], m = MULTIPLIERS[i];
               const full = h === 5 && throwCount[i] !== null;
@@ -304,8 +329,11 @@
             </div>
 
             <button className="new-round-btn" onClick={reset}>{t.newRound}</button>
-            {challengeMode && (
-              <button className="submit-btn" onClick={sendChallenge}>🏆 ERGEBNIS EINREICHEN</button>
+            {challengeMode && !locked && (
+              <button className="submit-btn" onClick={sendChallenge}>{t.submit}</button>
+            )}
+            {locked && (
+              <div className="submit-btn" style={{background:'#5a3e10', color:'rgba(240,216,144,0.5)', cursor:'not-allowed', textAlign:'center'}}>🔒 {t.locked}</div>
             )}
             <div className="copyright">© Jens Pergande 2026</div>
           </div>
