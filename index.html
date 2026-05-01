@@ -246,7 +246,14 @@
               <span className={"challenge-label" + (challengeMode ? " active" : "")}>
                 {challengeMode ? t.challengeOn : t.challengeOff}
               </span>
-              {challengeMode && <div style={{fontSize:'18px', fontWeight:'900', color:'#f0d890', letterSpacing:'2px', marginTop:'2px'}}>{clock}</div>}
+              {challengeMode && (
+                <div style={{marginTop:'4px'}}>
+                  <div style={{fontSize:'32px', fontWeight:'900', color:'#f5c842', letterSpacing:'3px', textShadow:'0 0 12px rgba(245,200,66,0.6)'}}>{clock}</div>
+                  <div style={{fontSize:'11px', fontWeight:'800', color:'#a8c090', letterSpacing:'1px'}}>
+                    START: <span style={{color:'#f5c842'}}>{startTime ? startTime.toLocaleTimeString('de-DE') : '–'}</span>
+                  </div>
+                </div>
+              )}
             </div>
             <button className={"toggle" + (challengeMode ? " on" : "")} onClick={toggleChallenge}>
               <div className="toggle-knob"></div>
